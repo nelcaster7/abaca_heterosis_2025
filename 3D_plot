@@ -1,1 +1,101 @@
+library(plotly)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(factoextra)
+library(tibble)
+library(reshape2)
+library(stats)
+library(RColorBrewer)
+library(ggforce)
+library(parallel)
+#for 3D PCA
+library(rgl)
+library(ggfortify)
+
+
+het_class<-read.csv("heterosis_for_graphing.csv", header = T)
+#data<-read.csv("clipboard",sep="\t",header=T)
+
+head(het_class)
+df <- data.frame(het_class)
+
+LogFC_Ab_Ban <- df$A.B
+LogFC_Ban_Pa <- df$B.P
+LogFC_Ab_Pa <- df$A.P
+Het_class<- df$Het.class
+
+
+plot_ly() %>%
+  add_markers(
+    data = df, x = ~LogFC_Ab_Ban, y = ~LogFC_Ban_Pa, z = ~LogFC_Ab_Pa,
+    color = ~Het_class, mode = "markers",
+    marker = list(size = 5)
+  ) %>%
+  add_trace(
+    data = line_data, x = ~x, y = ~y, z = ~z,
+    type = "scatter3d", mode = "lines",
+    line = list(color = "#B3B3B3", width = 4)
+  ) %>%
+  add_trace(
+    data = line_data2, x = ~x, y = ~y, z = ~z,
+    type = "scatter3d", mode = "lines",
+    line = list(color = "#E7D2AA", width = 4)
+  ) %>%
+  add_trace(
+    data = line_data3, x = ~x, y = ~y, z = ~z,
+    type = "scatter3d", mode = "lines",
+    line = list(color = "#B4DB5F", width = 4)
+  ) %>%
+  add_trace(
+    data = line_data4, x = ~x, y = ~y, z = ~z,
+    type = "scatter3d", mode = "lines",
+    line = list(color = "#8FAADC", width = 4)
+  ) %>%
+  add_trace(
+    data = line_data5, x = ~x, y = ~y, z = ~z,
+    type = "scatter3d", mode = "lines",
+    line = list(color = "#E293C2", width = 4)
+  ) %>%
+  add_trace(
+    data = line_data6, x = ~x, y = ~y, z = ~z,
+    type = "scatter3d", mode = "lines",
+    line = list(color = "#F7DD4A", width = 4)
+  ) %>%
+  add_trace(
+    data = line_data7, x = ~x, y = ~y, z = ~z,
+    type = "scatter3d", mode = "lines",
+    line = list(color = "#6DC4AF", width = 4)
+  ) %>%
+  add_trace(
+    data = line_data8, x = ~x, y = ~y, z = ~z,
+    type = "scatter3d", mode = "lines",
+    line = list(color = "#F3916E", width = 4)
+  ) %>%
+  layout(
+    scene = list(
+      xaxis = list(title = "x = LogFC(Ab/Ban)"),
+      yaxis = list(title = "y = LogFC(Ban/Pa)"),
+      zaxis = list(title = "z = LogFC(Ab/Pa)")
+    ),
+    title = "Heterosis in BC2 hybrid Bandala", legend = list(
+      font = list(size = 16),  # Increases legend text size
+      itemsizing = "constant"  # Ensures symbols scale with text
+    )
+  )
+
+
+
+##no lines
+plot_ly(df, x = ~LogFC_Ab_Ban, y = ~LogFC_Ban_Pa, z = ~LogFC_Ab_Pa,
+color = ~Het.class, text = ~Geneid, colors = "Set2",
+type = "scatter3d", mode = "markers") %>%
+layout(
+scene = list(
+xaxis = list(title = "x = Log2(Ab/Hyb)"),
+yaxis = list(title = "y = Log2(Hyb/Pa)"),
+zaxis = list(title = "z = Log2(Ab/Pa)")
+),
+title = "3D Scatter Plot of Modes of Expression Inheritance in the \n Backcross hybrid, Bandala"
+)
 
